@@ -47,8 +47,8 @@ CREATE TABLE league (
     id SERIAL PRIMARY KEY,
     season_id INTEGER NOT NULL REFERENCES seasons ON DELETE CASCADE,
     team_id INTEGER NOT NULL REFERENCES teams ON DELETE CASCADE,
-    wins INTEGER NOT NULL,
-    loses INTEGER NOT NULL 
+    wins INTEGER NOT NULL  DEFAULT 0,
+    loses INTEGER NOT NULL  DEFAULT 0
 );
 
 -- EXAMPLE DATA 
@@ -98,4 +98,4 @@ VALUES
 SELECT first_name, last_name, team_name, count_goals FROM goals JOIN players ON player_id = players.id JOIN teams ON teams.id = current_team_id ORDER BY count_goals desc;
 
 --Here we are selecting the season's leaderboard
-SELECT team_name, wins, loses from league JOIN teams ON teams.id = team_id ORDER BY wins desc, loses;
+SELECT team_name, wins, loses FROM league l JOIN teams t ON team_id = t.id ORDER BY wins desc;

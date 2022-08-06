@@ -13,7 +13,7 @@ CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username TEXT NOT NULL,
     secret_password TEXT NOT NULL,
-    favorite_region TEXT
+    favorite_region_id INTEGER REFERENCES regions ON DELETE SET NULL
 );
 
 CREATE TABLE categories (
@@ -25,8 +25,8 @@ CREATE TABLE posts (
     id SERIAL   PRIMARY KEY,
     title TEXT NOT NULL,
     post_description TEXT NOT NULL,
-    username_id integer NOT NULL REFERENCES users ON DELETE CASCADE,
     location_of_post TEXT NOT NULL, 
+    username_id integer NOT NULL REFERENCES users ON DELETE CASCADE,
     region_id integer REFERENCES regions ON DELETE SET NULL,
     category_id integer  REFERENCES categories ON DELETE SET NULL
 );
@@ -38,10 +38,10 @@ VALUES
 ('Georgetown'),
 ('Compton');
 
-INSERT INTO users (username, secret_password, favorite_region)
+INSERT INTO users (username, secret_password, favorite_region_id)
 VALUES
-('doglover123', 'cookie', 'Orange County'),
-('catlover0103', 'sphinxcatsareweird', 'Georgetown');
+('doglover123', 'cookie', 2),
+('catlover0103', 'sphinxcatsareweird', 1);
 
 INSERT INTO categories (category)
 VALUES
@@ -54,4 +54,4 @@ VALUES
 ('Husky', 'Selling Husky dogs real cheap!', 1, 'Compton', 2, 2);
 
 -- Here we can see who made the Husky post
-SELECT title, post_description, username from posts JOIN users ON username_id = users.id;
+SELECT title, post_description, username, category, region from posts JOIN users u ON username_id = u.id JOIN categories c ON category_id = c.id JOIN regions r ON region_id= r.id;
